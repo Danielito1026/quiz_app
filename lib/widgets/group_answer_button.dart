@@ -45,10 +45,6 @@ class _GroupAnswerButtonState extends State<GroupAnswerButton> {
       shuffledOptions = List.of(widget.options);
       selectedOption = widget.selectedOption;
     }
-    print('''question No.${widget.questionId}\n
-      showCorrectOption: ${widget.showCorrectOption}\n
-      correct option: ${widget.correctOption}
-    ''');
   }
 
   void initializedCurrentOptions() {

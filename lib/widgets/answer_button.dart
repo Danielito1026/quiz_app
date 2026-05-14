@@ -18,11 +18,6 @@ class AnswerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('''
-      isActive: ${isActive}
-      showResultStyle: ${showResultStyle}
-      isRight: ${isRight}
-    ''');
 
     return ElevatedButton(
       onPressed: onTap,
