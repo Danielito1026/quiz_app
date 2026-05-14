@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/data/constants.dart';
 import 'package:quiz_app/models/quiz_question.dart';
-import 'package:quiz_app/pages/checked_answer.dart';
+import 'package:quiz_app/pages/result_screen.dart';
 import 'package:quiz_app/widgets/gradient_container.dart';
 import 'package:quiz_app/data/questions.dart';
 import 'package:quiz_app/widgets/group_answer_button.dart';
@@ -95,7 +95,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const CheckedAnswer(),
+                                  builder: (context) => ResultScreen(userAnswers: userAnswers,),
                                 ),
                               );
                             }

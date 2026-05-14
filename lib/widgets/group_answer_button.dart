@@ -9,12 +9,22 @@ class GroupAnswerButton extends StatefulWidget {
     required this.options,
     required this.onSelected,
     this.selectedOption = -1,
+    this.shuffle = true,
+    this.readonly = false,
+    this.showCorrectOption = false,
+    this.isSelectedAnswerCorrect = false,
+    this.correctOption = -1,
   });
 
   final int questionId;
   final List<QuestionOption> options;
   final ValueChanged<int> onSelected;
   final int selectedOption;
+  final bool shuffle;
+  final bool readonly;
+  final bool showCorrectOption;
+  final bool isSelectedAnswerCorrect;
+  final int correctOption;
   @override
   State<GroupAnswerButton> createState() => _GroupAnswerButtonState();
 }
@@ -29,7 +39,16 @@ class _GroupAnswerButtonState extends State<GroupAnswerButton> {
     // TODO: implement initState
     super.initState();
 
-    initializedCurrentOptions();
+    if (widget.shuffle) {
+      initializedCurrentOptions();
+    } else {
+      shuffledOptions = List.of(widget.options);
+      selectedOption = widget.selectedOption;
+    }
+    print('''question No.${widget.questionId}\n
+      showCorrectOption: ${widget.showCorrectOption}\n
+      correct option: ${widget.correctOption}
+    ''');
   }
 
   void initializedCurrentOptions() {
@@ -76,7 +95,9 @@ class _GroupAnswerButtonState extends State<GroupAnswerButton> {
           (opt) => AnswerButton(
             answerText: opt.optionText,
             isActive: selectedOption == opt.id,
-            onTap: () => selectOption(opt.id),
+            showResultStyle: widget.showCorrectOption,
+            isRight: opt.isRight,
+            onTap: !widget.readonly ? () => selectOption(opt.id) : () {},
           ),
         ),
       ],
