@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/data/constants.dart';
 import 'package:quiz_app/data/questions.dart';
 import 'package:quiz_app/models/summary_data.dart';
 import 'package:quiz_app/widgets/gradient_container.dart';
 import 'package:quiz_app/widgets/group_answer_button.dart';
+import 'package:quiz_app/widgets/quiz.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key, required this.userAnswers});
@@ -62,54 +64,65 @@ class ResultScreen extends StatelessWidget {
         gradientBegin: AlignmentGeometry.topLeft,
         gradientEnd: AlignmentGeometry.bottomRight,
         child: SingleChildScrollView(
-          child: Column(
-            spacing: 10.0,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                elevation: 4,
-                color: Colors.deepPurple.shade800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.quiz,
-                        size: 40,
-                        color: Colors.deepPurple.shade200,
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        'Quiz Summary',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+          child: Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
+            child: Column(
+              spacing: 10.0,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  elevation: 4,
+                  color: Colors.deepPurple.shade800,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.quiz,
+                          size: 40,
+                          color: Colors.deepPurple.shade200,
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'You have answered ${summaryData.where((sd) => sd.isCorrect).length} out of ${summaryData.length} questions correctly!',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.deepPurple.shade100,
+                        SizedBox(height: 12),
+                        Text(
+                          'Quiz Summary',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                        SizedBox(height: 8),
+                        Text(
+                          'You have answered ${summaryData.where((sd) => sd.isCorrect).length} out of ${summaryData.length} questions correctly!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.deepPurple.shade100,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 6),
-              ...summaryData.asMap().entries.map((entry) {
-                final index = entry.key;
-                final sd = entry.value;
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Card(
+                ElevatedButton.icon(
+                  style: Constants.elevatedButtonStyle,
+                  icon: Icon(Icons.restart_alt_outlined),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Quiz()),
+                    );
+                  },
+                  label: Text('Try again?'),
+                ),
+                ...summaryData.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final sd = entry.value;
+                  return Card(
                     elevation: 6,
                     color: Colors.grey.shade900,
                     shape: RoundedRectangleBorder(
@@ -168,12 +181,14 @@ class ResultScreen extends StatelessWidget {
                           ),
                         ),
 
-                        // Question Content
                         Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: EdgeInsetsGeometry.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(height: 14),
                               Text(
                                 sd.questionText,
                                 style: TextStyle(
@@ -182,6 +197,7 @@ class ResultScreen extends StatelessWidget {
                                   color: Colors.grey.shade200,
                                   height: 1.4,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                               SizedBox(height: 16),
 
@@ -203,51 +219,47 @@ class ResultScreen extends StatelessWidget {
                                           .id,
                                     ),
                                   ),
-
-                              SizedBox(height: 12),
-
-                              // Remarks Section
-                              if (sd.remarks != null && sd.remarks!.isNotEmpty)
-                                Container(
-                                  padding: EdgeInsets.all(12),
-                                  margin: EdgeInsets.only(top: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.deepPurple.shade900,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: Colors.deepPurple.shade600,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.info_outline, size: 18),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          sd.remarks!,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            height: 1.4,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                             ],
                           ),
                         ),
+
+                        SizedBox(height: 12),
+
+                        // Remarks Section
+                        if (sd.remarks != null && sd.remarks!.isNotEmpty)
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                            margin: EdgeInsets.only(top: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple.shade900,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Colors.deepPurple.shade600,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.info_outline, size: 18),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    sd.remarks!,
+                                    style: TextStyle(fontSize: 14, height: 1.4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
 
-              SizedBox(height: 20),
-            ],
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

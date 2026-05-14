@@ -85,6 +85,7 @@ class _GroupAnswerButtonState extends State<GroupAnswerButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: 3,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ...shuffledOptions.map(
